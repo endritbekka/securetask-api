@@ -1,8 +1,9 @@
 import http from 'http'
 import app from '../app'
+import Constants from '../utils/Constants'
 
 const server = http.createServer(app)
-const serverPort = '3000';
+const serverPort = Constants.server.app_port;
 
 server.listen(normalizePort(serverPort))
 
