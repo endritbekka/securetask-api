@@ -1,8 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { ErrorResponse } from "../../lib/types";
-import { BaseError } from "../exceptions/Exceptions";
 
-function unknownError(err: unknown): ErrorResponse {
+export function UnknownError(err: unknown): ErrorResponse {
     return {
         error: true,
         name: 'unknown-error',
@@ -19,12 +18,7 @@ export function RouteExceptionHandler(cb: Function) {
         try {
             await cb(req, res, next)
         } catch (error: unknown) {
-            console.log('error:', error)
-            if (error instanceof BaseError) {
-                return res.status(error.statusCode).json(error)
-            }
-            const unknownErr = unknownError(error)
-            res.status(unknownErr.statusCode).json(unknownErr)
+            next(error)
         }
     }
 }

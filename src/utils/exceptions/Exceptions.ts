@@ -20,3 +20,13 @@ export class InternalServerError extends BaseError {
         super();
     }
 }
+
+export class RouteNotFoundError extends BaseError {
+    name = 'route-not-found-error'
+    message = 'This route could not be found.'
+    statusCode = 404
+
+    constructor() {
+        super();
+    }
+}
