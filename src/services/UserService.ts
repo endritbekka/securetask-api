@@ -1,5 +1,5 @@
 
-import { Entity, Repository } from "redis-om";
+import { Entity, EntityData, Repository } from "redis-om";
 import { userSchema } from "../entities/User";
 import Redis from "./Redis";
 
