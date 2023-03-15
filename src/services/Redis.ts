@@ -3,7 +3,7 @@ import { Client, Entity, Repository, Schema } from 'redis-om'
 import Constants from '../utils/Constants'
 
 class Redis {
-    private client: Client;
+    protected client: Client;
     
     constructor() {
         this.client = new Client();

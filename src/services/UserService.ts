@@ -1,22 +1,21 @@
 
-import { Entity, EntityData, Repository } from "redis-om";
+import { Entity, EntityData, Repository, Schema } from "redis-om";
 import { userSchema } from "../entities/User";
+import RepositoryService from "./AbstractRepositoryService";
 import Redis from "./Redis";
 
 
-class User {
-    private client: Redis;
-    private userRepo: Repository<Entity>;
-    
-    constructor() {
-        this.client = new Redis();
-        this.userRepo = this.client.fetchRepository(userSchema)
-    }
+class User extends RepositoryService {
+
+    // private async repository(): Promise<Repository<Entity>> {
+    //     await this.client.connect();
+    //     return this.client.fetchRepository(userSchema)        
+    // }
 
     public async createAndSave() {
-        await this.client.connect();
-        const id = await this.userRepo.createAndSave()
-        return id;
+        const repository = await this.repository(userSchema)
+        // const id = await repository.createAndSave();
+        // return id;
     }
 }
 
