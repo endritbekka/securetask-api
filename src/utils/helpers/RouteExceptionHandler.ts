@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { ErrorResponse } from "../../lib/types";
-import BaseRequest from "../../Http/Requests/BaseRequest";
+import { BaseRequestClass } from "../../Http/Requests/BaseRequest";
 import BaseResponse from "../../Http/Responses/BaseResponse";
 
 export function UnknownError(err: unknown): ErrorResponse {
@@ -18,7 +18,7 @@ export function UnknownError(err: unknown): ErrorResponse {
 export function RouteExceptionHandler(cb: Function) {
     return async function (req: Request, res: Response, next: NextFunction) {
         try {
-            await cb(new BaseRequest(req), new BaseResponse(res), next)
+            await cb(new BaseRequestClass(req), BaseResponse(res), next)
         } catch (error: unknown) {
             next(error)
         }

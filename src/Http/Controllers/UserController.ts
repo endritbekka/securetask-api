@@ -1,8 +1,6 @@
 
-import BaseRequest from '../Requests/BaseRequest';
-import BaseResponse from '../Responses/BaseResponse';
 import UserService from '../../services/UserService'
-import UserRequest from '../Requests/UserRequest';
+import { BaseRequest } from '../Requests/BaseRequest';
 
 class UserController {
     private userService: UserService;
@@ -11,8 +9,7 @@ class UserController {
         this.userService = new UserService()
     }
 
-    public async createAndSave(request: UserRequest, response: BaseResponse) {        
-        console.log('request:', request.testUserRequest())
+    public async createAndSave(request: BaseRequest) {        
         return await this.userService.createAndSave();
     }
 }

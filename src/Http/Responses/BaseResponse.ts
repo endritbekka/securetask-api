@@ -1,14 +1,19 @@
 
 
 import { Response } from 'express'
-import { BaseError } from '../../utils/exceptions/Exceptions';
+import { BaseError, JoiError, RouteNotFoundError } from '../../utils/exceptions/Exceptions';
 import { UnknownError } from '../../utils/helpers/RouteExceptionHandler';
-
+import { ExpressJoiError } from 'express-joi-validation'
 class BaseResponse {
     private response: Response;
 
     constructor(response: Response) {
         this.response = response;
+    }
+
+    private handleError(err: unknown){
+        const errOccurred = err instanceof BaseError ? err : UnknownError(err)
+        this.response.status(errOccurred.statusCode).json(errOccurred)
     }
 
     public success(body: object) {
@@ -19,9 +24,21 @@ class BaseResponse {
     }
     
     public error(err: unknown) {
-        const errOccurred = err instanceof BaseError ? err : UnknownError(err)
-        this.response.status(errOccurred.statusCode).json(errOccurred)
+       try {
+            if ((err as ExpressJoiError)?.error?.isJoi) throw new JoiError((err as ExpressJoiError))
+            this.handleError(err)
+        } catch (err: unknown){
+            this.handleError(err)
+        }
+    }
+
+    public routeNotFound() {
+        try {
+            throw new RouteNotFoundError()
+        } catch (err:unknown){
+            this.handleError(err)
+        }
     }
 }
 
-export default BaseResponse
+export default (response: Response) => new BaseResponse(response)

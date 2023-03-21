@@ -1,5 +1,5 @@
 import { ErrorResponse } from "../../lib/types";
-
+import { ExpressJoiError } from 'express-joi-validation'
 export class BaseError extends Error implements ErrorResponse {
     public error: boolean = true;
     public name: string = 'securetask-api-error'
@@ -28,5 +28,16 @@ export class RouteNotFoundError extends BaseError {
 
     constructor() {
         super();
+    }
+}
+
+export class JoiError extends BaseError {
+    name = 'joi-error-validation'
+    message = 'Validation error.'
+    statusCode = 400
+
+    constructor(joiError: ExpressJoiError) {
+        super();
+        this.details = { validation_errors: joiError.error?.details }
     }
 }

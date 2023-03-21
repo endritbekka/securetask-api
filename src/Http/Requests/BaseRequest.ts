@@ -1,14 +1,18 @@
 import { Request } from 'express';
 import { RequestBody, RequestParams } from '../../lib/types';
 
-class BaseRequest {
-    private req: Request;
+export interface BaseRequest {
+    body: RequestBody,
+    query: qs.ParsedQs,
+    params: RequestParams
+}
+
+export class BaseRequestClass implements BaseRequest {
     public body: RequestBody;
     public query: qs.ParsedQs;
     public params: RequestParams;
 
     constructor(req: Request) {
-        this.req = req;
         this.body = req.body;
         this.query = req.query;
         this.params = req.params;
@@ -24,5 +28,3 @@ class BaseRequest {
         return this.only(obj, keys)
     }
 }
-
-export default BaseRequest;

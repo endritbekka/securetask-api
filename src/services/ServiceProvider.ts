@@ -9,9 +9,7 @@ abstract class ServiceProvider {
     }
 
     protected async repository(schema: Schema<Entity>): Promise<Repository<Entity>> {
-        await this.redisClient.connect();
-        const repo = this.redisClient.fetchRepository(schema);
-        await this.redisClient.disconnect();
+        const repo = await this.redisClient.fetchRepository(schema);
         return repo;
     }
 }
