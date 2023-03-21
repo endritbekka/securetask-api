@@ -1,7 +1,7 @@
-import { Router, Request, Response } from "express";
-import { ValidatedRequest } from "express-joi-validation";
+import { Router, Response } from "express";
 import UserController from "../Http/Controllers/UserController";
 import BaseResponse from "../Http/Responses/BaseResponse";
+import { ValidatedRequest } from "../lib/types";
 import {
   CreateAndSaveUserRequest,
   RouteValidator,
@@ -17,7 +17,7 @@ router.post(
     request: ValidatedRequest<CreateAndSaveUserRequest>,
     response: Response
   ) => {
-    // BaseResponse(response).success(await UserController.createAndSave(request))
+    BaseResponse(response).success(await UserController.createAndSave(request));
   }
 );
 

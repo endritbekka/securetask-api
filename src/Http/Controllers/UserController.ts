@@ -1,5 +1,7 @@
 import UserService from "../../services/UserService";
-import { BaseRequest } from "../Requests/BaseRequest";
+import { ValidatedRequest } from "../../lib/types";
+import { CreateAndSaveUserRequest } from "../../lib/RouteValidations";
+import { UserEmailExists } from "../../utils/exceptions/Exceptions";
 
 class UserController {
   private userService: UserService;
@@ -8,8 +10,11 @@ class UserController {
     this.userService = new UserService();
   }
 
-  public async createAndSave(request: BaseRequest) {
-    return await this.userService.createAndSave();
+  public async createAndSave(request: ValidatedRequest<CreateAndSaveUserRequest>) {
+    if (await this.userService.emailExists(request.body.email)) {
+      throw new UserEmailExists()
+    }
+    return await this.userService.createAndSave(request.body);
   }
 }
 

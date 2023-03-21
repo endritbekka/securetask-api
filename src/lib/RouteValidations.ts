@@ -4,25 +4,26 @@ import {
   ContainerTypes,
   ValidatedRequestSchema,
 } from "express-joi-validation";
+import { EntityData } from "redis-om";
 
+export interface CreateAndSaveUser extends EntityData {
+  username: string;
+  password: string;
+  email: string;
+  verified: boolean
+}
 export interface CreateAndSaveUserRequest extends ValidatedRequestSchema {
-  [ContainerTypes.Body]: {
-    username: string;
-    password: string;
-    email: string;
-  };
+  [ContainerTypes.Body]: CreateAndSaveUser;
 }
 
 export const RouteValidator = createValidator({ passError: true });
 export class RouteValidatorSchema {
   static createAndSaveUser() {
-    const schema = Joi.object({
+    return Joi.object({
       username: Joi.string().alphanum().min(3).max(30).required(),
-
       password: Joi.string().min(6).max(12).required(),
-
       email: Joi.string().email({ minDomainSegments: 2 }).required(),
+      verified: Joi.boolean().default(false).valid(false)
     });
-    return schema;
   }
 }

@@ -1,3 +1,4 @@
+export { ValidatedRequest } from "express-joi-validation";
 export interface RequestBody {
   [key: string]: any;
 }

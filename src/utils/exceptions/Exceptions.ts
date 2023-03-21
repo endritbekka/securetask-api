@@ -41,3 +41,13 @@ export class JoiError extends BaseError {
     this.details = { validation_errors: joiError.error?.details };
   }
 }
+
+export class UserEmailExists extends BaseError {
+  name = "user-email-exists";
+  message = "User email already exists.";
+  statusCode = 400
+
+  constructor() {
+    super();
+  }
+}

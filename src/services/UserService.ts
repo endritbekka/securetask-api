@@ -1,13 +1,22 @@
-
 import { userSchema } from "../entities/User";
-import ServiceProvider from './ServiceProvider'
+import { CreateAndSaveUser } from "../lib/RouteValidations";
+import ServiceProvider from "./ServiceProvider";
 
 class User extends ServiceProvider {
-    public async createAndSave() {
-        const repository = await this.repository(userSchema);
-        const id = await repository.createAndSave();
-        return id;
-    }
+  public async createAndSave(data: CreateAndSaveUser) {
+    const repository = await this.repository(userSchema);
+    const id = await repository.createAndSave(data);
+    return id;
+  }
+
+  public async emailExists(email: string): Promise<number> {
+    const repository = await this.repository(userSchema);
+    return await repository
+      .search()
+      .where("email")
+      .is.equalTo(email)
+      .return.count()
+  }
 }
 
 export default User;
