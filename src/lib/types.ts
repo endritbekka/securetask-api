@@ -1,15 +1,15 @@
 export interface RequestBody {
-    [key: string]: any;
+  [key: string]: any;
 }
 
 export interface RequestParams {
-    [key: string]: string;
+  [key: string]: string;
 }
 
 export type ErrorResponse = {
-    error: boolean;
-    name: string;
-    message: string;
-    statusCode: number;
-    details: object;
-}
+  error: boolean;
+  name: string;
+  message: string;
+  statusCode: number;
+  details: object;
+};
