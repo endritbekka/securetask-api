@@ -5,8 +5,8 @@ import ServiceProvider from "./ServiceProvider";
 class User extends ServiceProvider {
   public async createAndSave(data: CreateAndSaveUser) {
     const repository = await this.repository(userSchema);
-    const id = await repository.createAndSave(data);
-    return id;
+    const entity = await repository.createAndSave(data);
+    return { id: entity.entityId };
   }
 
   public async emailExists(email: string): Promise<number> {
@@ -15,7 +15,7 @@ class User extends ServiceProvider {
       .search()
       .where("email")
       .is.equalTo(email)
-      .return.count()
+      .return.count();
   }
 }
 
