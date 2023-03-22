@@ -10,7 +10,8 @@ export interface CreateAndSaveUser extends EntityData {
   username: string;
   password: string;
   email: string;
-  verified: boolean
+  verified: boolean;
+  two_factor_auth_enabled: boolean
 }
 export interface CreateAndSaveUserRequest extends ValidatedRequestSchema {
   [ContainerTypes.Body]: CreateAndSaveUser;
@@ -23,7 +24,8 @@ export class RouteValidatorSchema {
       username: Joi.string().alphanum().min(3).max(30).required(),
       password: Joi.string().min(6).max(12).required(),
       email: Joi.string().email({ minDomainSegments: 2 }).required(),
-      verified: Joi.boolean().default(false).valid(false)
+      verified: Joi.boolean().default(false).valid(false),
+      two_factor_auth_enabled: Joi.boolean().default(true).valid(true),
     });
   }
 }

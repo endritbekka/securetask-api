@@ -7,6 +7,7 @@ const schema = new Schema(User, {
   password: { type: "string" },
   email: { type: "string" },
   verified: { type: "boolean" },
+  two_factor_auth_enabled: { type: "boolean" }
 });
 
 async function createIndex() {
