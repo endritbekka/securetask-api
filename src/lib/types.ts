@@ -1,3 +1,6 @@
+import { ContainerTypes, ValidatedRequestSchema } from "express-joi-validation";
+import { EntityData } from "redis-om";
+
 export { ValidatedRequest } from "express-joi-validation";
 export interface RequestBody {
   [key: string]: any;
@@ -14,3 +17,22 @@ export type ErrorResponse = {
   statusCode: number;
   details: object;
 };
+
+export interface CreateAndSaveUser extends EntityData {
+  username: string;
+  password: string;
+  email: string;
+  verified: boolean;
+  two_factor_auth_enabled: boolean;
+}
+export interface CreateAndSaveUserRequest extends ValidatedRequestSchema {
+  [ContainerTypes.Body]: CreateAndSaveUser;
+}
+
+export interface UserLogin extends EntityData {
+  email: string;
+  password: string;
+}
+export interface UserLoginRequest extends ValidatedRequestSchema {
+  [ContainerTypes.Body]: UserLogin;
+}

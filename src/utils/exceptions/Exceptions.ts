@@ -51,3 +51,13 @@ export class UserEmailExists extends BaseError {
     super();
   }
 }
+
+export class AuthLoginError extends BaseError {
+  name = "auth-login-error";
+  message = "Email or password is incorrect.";
+  statusCode = 400;
+
+  constructor() {
+    super();
+  }
+}

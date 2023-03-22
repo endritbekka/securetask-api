@@ -2,6 +2,7 @@ import { Entity, Repository, Schema } from "redis-om";
 import Redis from "./Redis";
 
 abstract class ServiceProvider {
+  private redisSchemaRepo: Schema<Entity> | null = null;
   protected redisClient: Redis;
 
   constructor() {
@@ -11,8 +12,7 @@ abstract class ServiceProvider {
   protected async repository(
     schema: Schema<Entity>
   ): Promise<Repository<Entity>> {
-    const repo = await this.redisClient.fetchRepository(schema);
-    return repo;
+    return await this.redisClient.fetchRepository(schema);
   }
 }
 

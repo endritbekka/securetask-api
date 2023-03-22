@@ -1,12 +1,12 @@
 import { Router, Response } from "express";
 import UserController from "../Http/Controllers/UserController";
 import BaseResponse from "../Http/Responses/BaseResponse";
-import { ValidatedRequest } from "../lib/types";
 import {
   CreateAndSaveUserRequest,
-  RouteValidator,
-  RouteValidatorSchema,
-} from "../lib/RouteValidations";
+  UserLoginRequest,
+  ValidatedRequest,
+} from "../lib/types";
+import { RouteValidator, RouteValidatorSchema } from "../lib/RouteValidations";
 
 const router = Router();
 
@@ -18,6 +18,14 @@ router.post(
     response: Response
   ) => {
     BaseResponse(response).success(await UserController.createAndSave(request));
+  }
+);
+
+router.post(
+  "/login",
+  RouteValidator.body(RouteValidatorSchema.loginUser()),
+  async (request: ValidatedRequest<UserLoginRequest>, response: Response) => {
+    BaseResponse(response).success(await UserController.login(request));
   }
 );
 

@@ -1,5 +1,6 @@
-import { userSchema } from "../entities/User";
-import { CreateAndSaveUser } from "../lib/RouteValidations";
+import { Entity } from "redis-om";
+import { UserEntity, userSchema } from "../entities/User";
+import { CreateAndSaveUser, UserLogin } from "../lib/types";
 import ServiceProvider from "./ServiceProvider";
 
 class User extends ServiceProvider {
@@ -9,13 +10,37 @@ class User extends ServiceProvider {
     return { id: entity.entityId };
   }
 
-  public async emailExists(email: string): Promise<number> {
+  public async emailExists(email: string): Promise<UserEntity| null> {
     const repository = await this.repository(userSchema);
     return await repository
       .search()
       .where("email")
       .is.equalTo(email)
-      .return.count();
+      .return.first()
+  }
+
+  public async attemptLoginQuery(data: UserLogin) {
+    const repository = await this.repository(userSchema);
+    return await repository
+      .search()
+      .where("email")
+      .is
+      .equalTo(data.email)
+      .where('password')
+      .is
+      .equalTo(data.password)
+      .return.first();
+  }
+
+  // Experimental method. Not being used by now.
+  private async find<T extends Record<string, any>>(conditions: T) {
+    const repository = await this.repository(userSchema);
+    const test = repository.search();
+
+    for (const condition in conditions) {
+      test.where(condition).is.equalTo(conditions[condition]);
+    }
+    return await test.return.first();
   }
 }
 

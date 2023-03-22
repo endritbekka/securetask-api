@@ -1,5 +1,6 @@
 import { Client, Entity, Repository, Schema } from "redis-om";
 import Constants from "../utils/Constants";
+import RepositoryService from "./RepositoryService";
 
 class Redis {
   protected client: Client;
