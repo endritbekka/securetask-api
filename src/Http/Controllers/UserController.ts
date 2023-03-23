@@ -36,13 +36,13 @@ class UserController {
     if (!result) {
       throw new AuthLoginError();
     }
-    const user: User = result as unknown as User;
+    const user: User = this.userService.toRedisJson(result) as unknown as User;
     if (!(await Bcrypt.compare(request.body.password, user.password))) {
       throw new AuthLoginError();
     }
 
-    const accessToken = this.userService.generateAccessToken(user);
-    const refreshToken = this.userService.generateRefreshToken();
+    const accessToken = this.userService.generateToken()
+    const refreshToken = this.userService.generateToken();
 
     return { accessToken, refreshToken };
   }

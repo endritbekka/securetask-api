@@ -13,6 +13,11 @@ abstract class ServiceProvider {
   ): Promise<Repository<Entity>> {
     return await this.redisClient.fetchRepository(schema);
   }
+
+  public toRedisJson(entity: Entity | null) {
+    const newEntity = entity?.toRedisJson();
+    return { ...newEntity, entityId: entity?.entityId };
+  }
 }
 
 export default ServiceProvider;
