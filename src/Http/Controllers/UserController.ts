@@ -1,10 +1,15 @@
 import UserService from "../../services/UserService";
-import { CreateAndSaveUserRequest, UserLoginRequest, ValidatedRequest } from "../../lib/types";
+import {
+  CreateAndSaveUserRequest,
+  User,
+  UserLoginRequest,
+  ValidatedRequest,
+} from "../../lib/types";
 import {
   UserEmailExists,
   AuthLoginError,
 } from "../../utils/exceptions/Exceptions";
-import Bcrypt from "../../lib/Bcrypt"
+import Bcrypt from "../../lib/Bcrypt";
 
 class UserController {
   private userService: UserService;
@@ -24,8 +29,12 @@ class UserController {
   }
 
   public async login(request: ValidatedRequest<UserLoginRequest>) {
-    const result = await this.userService.emailExists(request.body.email)
+    const result = await this.userService.emailExists(request.body.email);
     if (!result) {
+      throw new AuthLoginError();
+    }
+    const user: User = result as unknown as User;
+    if (!await Bcrypt.compare(request.body.password, user.password)) {
       throw new AuthLoginError();
     }
     return result;

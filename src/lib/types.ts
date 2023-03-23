@@ -5,7 +5,6 @@ export { ValidatedRequest } from "express-joi-validation";
 export interface RequestBody {
   [key: string]: any;
 }
-
 export interface RequestParams {
   [key: string]: string;
 }
@@ -18,13 +17,17 @@ export type ErrorResponse = {
   details: object;
 };
 
-export interface CreateAndSaveUser extends EntityData {
+export interface User {
+  entityId: string;
   username: string;
   password: string;
   email: string;
   verified: boolean;
   two_factor_auth_enabled: boolean;
 }
+
+export interface CreateAndSaveUser extends EntityData, Omit<User, 'entityId'> {}
+
 export interface CreateAndSaveUserRequest extends ValidatedRequestSchema {
   [ContainerTypes.Body]: CreateAndSaveUser;
 }
