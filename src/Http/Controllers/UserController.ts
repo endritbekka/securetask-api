@@ -10,9 +10,6 @@ import {
   AuthLoginError,
 } from "../../utils/exceptions/Exceptions";
 import Bcrypt from "../../lib/Bcrypt";
-import Jwt from "../../lib/Jwt";
-import General from "../../utils/helpers/General";
-import Constants from "../../utils/Constants";
 
 class UserController {
   private userService: UserService;
