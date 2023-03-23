@@ -33,7 +33,6 @@ class UserController {
 
   public async login(request: ValidatedRequest<UserLoginRequest>) {
     const result = await this.userService.emailExists(request.body.email);
-    console.log("result:", { ...result });
     if (!result) {
       throw new AuthLoginError();
     }
