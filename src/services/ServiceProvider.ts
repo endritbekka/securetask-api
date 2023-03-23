@@ -2,7 +2,6 @@ import { Entity, Repository, Schema } from "redis-om";
 import Redis from "./Redis";
 
 abstract class ServiceProvider {
-  private redisSchemaRepo: Schema<Entity> | null = null;
   protected redisClient: Redis;
 
   constructor() {
