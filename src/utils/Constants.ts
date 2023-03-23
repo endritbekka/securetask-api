@@ -8,6 +8,9 @@ interface configurationI {
   redis: {
     url: string;
   };
+  jwt: {
+    auth_key: string
+  }
 }
 
 const configuration: configurationI = {
@@ -16,6 +19,9 @@ const configuration: configurationI = {
   },
   redis: {
     url: process.env.REDIS_URL || "",
+  },
+  jwt: {
+    auth_key: process.env.AUTH_JWT_KEY as string
   },
 };
 

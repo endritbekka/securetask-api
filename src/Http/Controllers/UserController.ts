@@ -10,6 +10,9 @@ import {
   AuthLoginError,
 } from "../../utils/exceptions/Exceptions";
 import Bcrypt from "../../lib/Bcrypt";
+import Jwt from "../../lib/Jwt";
+import General from "../../utils/helpers/General";
+import Constants from "../../utils/Constants";
 
 class UserController {
   private userService: UserService;
@@ -30,14 +33,19 @@ class UserController {
 
   public async login(request: ValidatedRequest<UserLoginRequest>) {
     const result = await this.userService.emailExists(request.body.email);
+    console.log("result:", { ...result });
     if (!result) {
       throw new AuthLoginError();
     }
     const user: User = result as unknown as User;
-    if (!await Bcrypt.compare(request.body.password, user.password)) {
+    if (!(await Bcrypt.compare(request.body.password, user.password))) {
       throw new AuthLoginError();
     }
-    return result;
+
+    const accessToken = this.userService.generateAccessToken(user);
+    const refreshToken = this.userService.generateRefreshToken();
+
+    return { accessToken, refreshToken };
   }
 }
 

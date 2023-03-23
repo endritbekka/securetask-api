@@ -18,7 +18,7 @@ class BaseResponse {
     this.response.status(errOccurred.statusCode).json(errOccurred);
   }
 
-  public success(body: object | null) {
+  public success(body: object | string | number | null) {
     this.response.status(200).json({
       error: false,
       message: body,
@@ -27,8 +27,9 @@ class BaseResponse {
 
   public error(err: unknown) {
     try {
-      if ((err as ExpressJoiError)?.error?.isJoi)
+      if ((err as ExpressJoiError)?.error?.isJoi) {
         throw new JoiError(err as ExpressJoiError);
+      }
       this.handleError(err);
     } catch (err: unknown) {
       this.handleError(err);

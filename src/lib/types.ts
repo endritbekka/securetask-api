@@ -1,5 +1,6 @@
 import { ContainerTypes, ValidatedRequestSchema } from "express-joi-validation";
 import { EntityData } from "redis-om";
+import { SignOptions, Secret } from "jsonwebtoken";
 
 export { ValidatedRequest } from "express-joi-validation";
 export interface RequestBody {
@@ -7,6 +8,17 @@ export interface RequestBody {
 }
 export interface RequestParams {
   [key: string]: string;
+}
+
+export interface JWTSign {
+  payload: string | Buffer | object;
+  secretOrPrivateKey: Secret;
+  options?: SignOptions | undefined;
+}
+
+export interface JWTVerify {
+  token: string;
+  secretOrPrivateKey: Secret;
 }
 
 export type ErrorResponse = {

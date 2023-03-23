@@ -1,10 +1,5 @@
 import * as Joi from "joi";
-import {
-  createValidator,
-  ContainerTypes,
-  ValidatedRequestSchema,
-} from "express-joi-validation";
-import { EntityData } from "redis-om";
+import { createValidator } from "express-joi-validation";
 
 export const RouteValidator = createValidator({ passError: true });
 export class RouteValidatorSchema {

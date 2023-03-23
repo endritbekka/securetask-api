@@ -1,35 +1,38 @@
-import { Entity } from "redis-om";
-import { UserEntity, userSchema } from "../entities/User";
-import { CreateAndSaveUser, UserLogin } from "../lib/types";
+import { RedisJsonData } from "redis-om";
+import { userSchema } from "../entities/User";
+import Jwt from "../lib/Jwt";
+import { CreateAndSaveUser, User as UserI } from "../lib/types";
 import ServiceProvider from "./ServiceProvider";
+import Constants from "../utils/Constants";
+import crypto from "crypto";
+import GeneralHelper from "../utils/helpers/General";
 
 class User extends ServiceProvider {
   public async createAndSave(data: CreateAndSaveUser) {
     const repository = await this.repository(userSchema);
     const entity = await repository.createAndSave(data);
-    return { id: entity.entityId };
+    return entity.entityId;
   }
 
-  public async emailExists(email: string): Promise<UserEntity| null> {
+  public async emailExists(email: string): Promise<RedisJsonData | undefined> {
     const repository = await this.repository(userSchema);
-    return await repository
+    const result = await repository
       .search()
       .where("email")
       .is.equalTo(email)
-      .return.first()
+      .return.first();
+    return result?.toRedisJson();
   }
 
-  public async attemptLoginQuery(data: UserLogin) {
-    const repository = await this.repository(userSchema);
-    return await repository
-      .search()
-      .where("email")
-      .is
-      .equalTo(data.email)
-      .where('password')
-      .is
-      .equalTo(data.password)
-      .return.first();
+  public generateAccessToken(user: Partial<UserI>) {
+    return Jwt.sign({
+      payload: GeneralHelper.withoutKeys(user, ['password']),
+      secretOrPrivateKey: Constants.jwt.auth_key,
+    });
+  }
+
+  public generateRefreshToken() {
+    return crypto.randomBytes(24).toString("hex");
   }
 
   // Experimental method. Not being used by now.
