@@ -39,9 +39,27 @@ class User extends ServiceProvider {
     return twoDaysLater;
   }
 
+  public tokenExpired(exp: number) {
+    return new Date().getTime() >= exp;
+  }
+
   public async saveSession(session: CreateUserSession) {
     const repository = await this.repository(userSessionSchema);
     return await repository.createAndSave(session);
+  }
+
+  public async findByEntityId(entityId: string) {
+    const repository = await this.repository(userSchema);
+    return await repository.fetch(entityId);
+  }
+
+  public async findSession(key: string, token: string) {
+    const repository = await this.repository(userSessionSchema);
+    return await repository
+      .search()
+      .where(key)
+      .is.equalTo(token)
+      .return.first();
   }
 }
 

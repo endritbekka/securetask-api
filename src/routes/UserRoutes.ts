@@ -1,4 +1,4 @@
-import { Router, Response } from "express";
+import { Router, Response, Request } from "express";
 import UserController from "../Http/Controllers/UserController";
 import BaseResponse from "../Http/Responses/BaseResponse";
 import {
@@ -7,6 +7,7 @@ import {
   ValidatedRequest,
 } from "../lib/types";
 import { RouteValidator, RouteValidatorSchema } from "../lib/RouteValidations";
+import AuthMiddleware from "../Http/Middlewares/AuthMiddleware";
 
 const router = Router();
 
@@ -26,6 +27,15 @@ router.post(
   RouteValidator.body(RouteValidatorSchema.loginUser()),
   async (request: ValidatedRequest<UserLoginRequest>, response: Response) => {
     BaseResponse(response).success(await UserController.login(request));
+  }
+);
+
+router.get(
+  "/me",
+  RouteValidator.headers(RouteValidatorSchema.currentUser()),
+  AuthMiddleware.validateAccessToken,
+  async (request: Request, response: Response) => {
+    BaseResponse(response).success(UserController.me(request));
   }
 );
 

@@ -19,4 +19,8 @@ export class RouteValidatorSchema {
       email: Joi.string().email({ minDomainSegments: 2 }).required(),
     });
   }
+
+  static currentUser() {
+    return Joi.object({ access_token: Joi.string().required() });
+  }
 }

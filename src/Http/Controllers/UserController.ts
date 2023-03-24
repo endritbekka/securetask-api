@@ -10,6 +10,7 @@ import {
   AuthLoginError,
 } from "../../utils/exceptions/Exceptions";
 import Bcrypt from "../../lib/Bcrypt";
+import { Request } from "express";
 
 class UserController {
   private userService: UserService;
@@ -50,6 +51,10 @@ class UserController {
     });
 
     return session;
+  }
+
+  public me(request: Request) {
+    return request.user;
   }
 }
 

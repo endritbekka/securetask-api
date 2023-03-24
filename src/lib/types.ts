@@ -1,6 +1,8 @@
 import { ContainerTypes, ValidatedRequestSchema } from "express-joi-validation";
 import { EntityData } from "redis-om";
 import { SignOptions, Secret } from "jsonwebtoken";
+import { IncomingHttpHeaders } from "http";
+import { Request } from "express";
 
 export { ValidatedRequest } from "express-joi-validation";
 export interface RequestBody {
@@ -53,6 +55,7 @@ export interface UserLoginRequest extends ValidatedRequestSchema {
 }
 
 export interface UserSession {
+  entityId: string;
   user_entity_id: string;
   access_token: string;
   refresh_token: string;
@@ -60,4 +63,18 @@ export interface UserSession {
   refresh_token_exp: number;
 }
 
-export interface CreateUserSession extends UserSession, EntityData {}
+export interface CreateUserSession
+  extends EntityData,
+    Omit<UserSession, "entityId"> {}
+
+export interface UserRequest extends Request {
+  user: Partial<User>;
+}
+
+declare global {
+  namespace Express {
+    export interface Request {
+      user: Partial<User>;
+    }
+  }
+}

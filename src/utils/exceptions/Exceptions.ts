@@ -45,7 +45,7 @@ export class JoiError extends BaseError {
 export class UserEmailExists extends BaseError {
   name = "user-email-exists";
   message = "User email already exists.";
-  statusCode = 400
+  statusCode = 400;
 
   constructor() {
     super();
@@ -56,6 +56,26 @@ export class AuthLoginError extends BaseError {
   name = "auth-login-error";
   message = "Email or password is incorrect.";
   statusCode = 400;
+
+  constructor() {
+    super();
+  }
+}
+
+export class InvalidAccessToken extends BaseError {
+  name = "auth-access-token-error";
+  message = "Invalid access token";
+  statusCode = 401;
+
+  constructor() {
+    super();
+  }
+}
+
+export class AccessTokenExpired extends BaseError {
+  name = "auth-access-token-expired-error";
+  message = "Access token has expired";
+  statusCode = 401;
 
   constructor() {
     super();
