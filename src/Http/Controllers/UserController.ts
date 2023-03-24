@@ -53,6 +53,11 @@ class UserController {
     return session;
   }
 
+  public async logout(request: Request) {
+    await this.userService.deleteSessionByEntityId(request.session.entityId);
+    return true;
+  }
+
   public me(request: Request) {
     return request.user;
   }

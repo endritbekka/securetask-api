@@ -30,10 +30,19 @@ router.post(
   }
 );
 
+router.post(
+  "/logout",
+  RouteValidator.headers(RouteValidatorSchema.currentUser()),
+  AuthMiddleware.validateAccessToken,
+  async (request: Request, response: Response) => {
+    BaseResponse(response).success(await UserController.logout(request));
+  }
+);
+
 router.get(
   "/me",
   RouteValidator.headers(RouteValidatorSchema.currentUser()),
-  AuthMiddleware.validateAccessToken,
+  [AuthMiddleware.validateAccessToken, AuthMiddleware.populateUser],
   async (request: Request, response: Response) => {
     BaseResponse(response).success(UserController.me(request));
   }

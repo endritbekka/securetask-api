@@ -34,9 +34,17 @@ class AuthMiddleware {
     if (this.userService.tokenExpired(session.access_token_exp)) {
       throw new AccessTokenExpired();
     }
+    request.session = session;
+    next();
+  };
 
+  public populateUser = async (
+    request: Request,
+    response: Response,
+    next: NextFunction
+  ) => {
     const entity = await this.userService.findByEntityId(
-      session.user_entity_id
+      request.session.user_entity_id
     );
     const user: Partial<User> = GeneralHelper.withoutKeys(
       this.userService.toRedisJson(entity) as unknown as User,

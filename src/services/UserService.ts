@@ -53,6 +53,11 @@ class User extends ServiceProvider {
     return await repository.fetch(entityId);
   }
 
+  public async deleteSessionByEntityId(entityId: string) {
+    const repository = await this.repository(userSessionSchema);
+    return await repository.remove(entityId);
+  }
+
   public async findSession(key: string, token: string) {
     const repository = await this.repository(userSessionSchema);
     return await repository

@@ -18,7 +18,7 @@ class BaseResponse {
     this.response.status(errOccurred.statusCode).json(errOccurred);
   }
 
-  public success(body: object | string | number | null) {
+  public success(body: object | string | number | boolean | null) {
     this.response.status(200).json({
       error: false,
       message: body,
