@@ -45,6 +45,8 @@ class UserController {
       user_entity_id: user.entityId,
       access_token,
       refresh_token,
+      access_token_exp: this.userService.getAccessTokenExpire(),
+      refresh_token_exp: this.userService.getRefreshTokenExpire(),
     });
 
     return session;

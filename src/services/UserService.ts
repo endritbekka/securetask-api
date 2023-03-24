@@ -25,17 +25,24 @@ class User extends ServiceProvider {
     return crypto.randomBytes(30).toString("hex");
   }
 
+  public getAccessTokenExpire() {
+    const currentTime = new Date().getTime();
+    const fiveMinutesLater = new Date(currentTime + 5 * 60 * 1000).getTime();
+    return fiveMinutesLater;
+  }
+
+  public getRefreshTokenExpire() {
+    const currentTime = new Date().getTime();
+    const twoDaysLater = new Date(
+      currentTime + 2 * 24 * 60 * 60 * 1000
+    ).getTime();
+    return twoDaysLater;
+  }
+
   public async saveSession(session: CreateUserSession) {
     const repository = await this.repository(userSessionSchema);
     return await repository.createAndSave(session);
   }
-
-  // public generateAccessToken(user: Partial<UserI>) {
-  //   return Jwt.sign({
-  //     payload: GeneralHelper.withoutKeys(user, ['password']),
-  //     secretOrPrivateKey: Constants.jwt.auth_key,
-  //   });
-  // }
 }
 
 export default User;

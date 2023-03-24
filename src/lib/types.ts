@@ -56,6 +56,8 @@ export interface UserSession {
   user_entity_id: string;
   access_token: string;
   refresh_token: string;
+  access_token_exp: number;
+  refresh_token_exp: number;
 }
 
 export interface CreateUserSession extends UserSession, EntityData {}

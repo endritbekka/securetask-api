@@ -7,6 +7,8 @@ const schema = new Schema(UserSession, {
   user_entity_id: { type: "string" },
   access_token: { type: "string" },
   refresh_token: { type: "string" },
+  access_token_exp: { type: "number" },
+  refresh_token_exp: { type: "number" },
 });
 
 async function createIndex() {
