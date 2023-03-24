@@ -38,7 +38,7 @@ export interface User {
   two_factor_auth_enabled: boolean;
 }
 
-export interface CreateAndSaveUser extends EntityData, Omit<User, 'entityId'> {}
+export interface CreateAndSaveUser extends EntityData, Omit<User, "entityId"> {}
 
 export interface CreateAndSaveUserRequest extends ValidatedRequestSchema {
   [ContainerTypes.Body]: CreateAndSaveUser;
@@ -51,3 +51,11 @@ export interface UserLogin extends EntityData {
 export interface UserLoginRequest extends ValidatedRequestSchema {
   [ContainerTypes.Body]: UserLogin;
 }
+
+export interface UserSession {
+  user_entity_id: string;
+  access_token: string;
+  refresh_token: string;
+}
+
+export interface CreateUserSession extends UserSession, EntityData {}

@@ -38,10 +38,16 @@ class UserController {
       throw new AuthLoginError();
     }
 
-    const accessToken = this.userService.generateToken()
-    const refreshToken = this.userService.generateToken();
+    const access_token = this.userService.generateToken();
+    const refresh_token = this.userService.generateToken();
 
-    return { accessToken, refreshToken };
+    const session = await this.userService.saveSession({
+      user_entity_id: user.entityId,
+      access_token,
+      refresh_token,
+    });
+
+    return session;
   }
 }
 
