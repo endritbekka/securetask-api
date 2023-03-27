@@ -81,3 +81,33 @@ export class AccessTokenExpired extends BaseError {
     super();
   }
 }
+
+export class AccessTokenNotExpired extends BaseError {
+  name = "auth-access-token-not-expired-error";
+  message = "Access token has not been expired.";
+  statusCode = 401;
+
+  constructor() {
+    super();
+  }
+}
+
+export class InvalidRefreshToken extends BaseError {
+  name = "auth-refresh-token-invalid";
+  message = "Invalid refresh token.";
+  statusCode = 401;
+
+  constructor() {
+    super();
+  }
+}
+
+export class RefreshTokenExpired extends BaseError {
+  name = "auth-refresh-token-expired";
+  message = "Refresh token has expired.";
+  statusCode = 401;
+
+  constructor() {
+    super();
+  }
+}

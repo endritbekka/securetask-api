@@ -1,6 +1,7 @@
 import UserService from "../../services/UserService";
 import {
   CreateAndSaveUserRequest,
+  CreateUserSession,
   User,
   UserLoginRequest,
   ValidatedRequest,
@@ -8,9 +9,13 @@ import {
 import {
   UserEmailExists,
   AuthLoginError,
+  AccessTokenNotExpired,
+  InvalidRefreshToken,
+  RefreshTokenExpired,
 } from "../../utils/exceptions/Exceptions";
 import Bcrypt from "../../lib/Bcrypt";
 import { Request } from "express";
+import GeneralHelper from "../../utils/helpers/General";
 
 class UserController {
   private userService: UserService;
@@ -51,6 +56,32 @@ class UserController {
     });
 
     return session;
+  }
+
+  public async reGenerateAccessToken(request: Request) {
+    const session = request.session;
+    if (!this.userService.tokenExpired(session.access_token_exp)) {
+      throw new AccessTokenNotExpired();
+    }
+    if (session.refresh_token !== (request.headers.refresh_token as string)) {
+      throw new InvalidRefreshToken();
+    }
+    if (this.userService.tokenExpired(session.refresh_token_exp)) {
+      throw new RefreshTokenExpired();
+    }
+
+    session.access_token = this.userService.generateToken();
+    session.refresh_token = this.userService.generateToken();
+    session.access_token_exp = this.userService.getAccessTokenExpire();
+    session.refresh_token_exp = this.userService.getRefreshTokenExpire();
+
+    await this.userService.deleteSessionByEntityId(session.entityId);
+
+    const newSession = GeneralHelper.withoutKeys(session, [
+      "entityId",
+    ]) as CreateUserSession;
+
+    return await this.userService.saveSession(newSession);
   }
 
   public async logout(request: Request) {

@@ -1,6 +1,10 @@
-import { Entity } from "redis-om";
+import { Entity, EntityData } from "redis-om";
 import { userSchema } from "../entities/User";
-import { CreateAndSaveUser, CreateUserSession } from "../lib/types";
+import {
+  CreateAndSaveUser,
+  CreateUserSession,
+  UserSession,
+} from "../lib/types";
 import { userSessionSchema } from "../entities/UserSession";
 import ServiceProvider from "./ServiceProvider";
 import crypto from "crypto";
@@ -37,6 +41,10 @@ class User extends ServiceProvider {
       currentTime + 2 * 24 * 60 * 60 * 1000
     ).getTime();
     return twoDaysLater;
+  }
+
+  public async updateTokenSession() {
+    const repository = await this.repository(userSessionSchema);
   }
 
   public tokenExpired(exp: number) {

@@ -23,4 +23,11 @@ export class RouteValidatorSchema {
   static currentUser() {
     return Joi.object({ access_token: Joi.string().required() });
   }
+
+  static reGenerateAccessToken() {
+    return Joi.object({
+      access_token: Joi.string().required(),
+      refresh_token: Joi.string().required(),
+    });
+  }
 }

@@ -31,10 +31,18 @@ class AuthMiddleware {
       result
     ) as unknown as UserSession;
 
-    if (this.userService.tokenExpired(session.access_token_exp)) {
+    request.session = session;
+    next();
+  };
+
+  public validateAccessTokenExpiration = async (
+    request: Request,
+    response: Response,
+    next: NextFunction
+  ) => {
+    if (this.userService.tokenExpired(request.session.access_token_exp)) {
       throw new AccessTokenExpired();
     }
-    request.session = session;
     next();
   };
 
