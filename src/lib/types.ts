@@ -1,7 +1,6 @@
 import { ContainerTypes, ValidatedRequestSchema } from "express-joi-validation";
 import { EntityData } from "redis-om";
 import { SignOptions, Secret } from "jsonwebtoken";
-import { IncomingHttpHeaders } from "http";
 import { Request } from "express";
 
 export { ValidatedRequest } from "express-joi-validation";
@@ -75,7 +74,7 @@ declare global {
   namespace Express {
     export interface Request {
       user: Partial<User>;
-      session: UserSession
+      session: UserSession;
     }
   }
 }
