@@ -1,6 +1,6 @@
 import { ContainerTypes, ValidatedRequestSchema } from "express-joi-validation";
 import { EntityData } from "redis-om";
-import { SignOptions, Secret } from "jsonwebtoken";
+import { SignOptions, Secret, JwtPayload } from "jsonwebtoken";
 import { Request } from "express";
 
 export { ValidatedRequest } from "express-joi-validation";
@@ -66,8 +66,37 @@ export interface CreateUserSession
   extends EntityData,
     Omit<UserSession, "entityId"> {}
 
-export interface UserRequest extends Request {
-  user: Partial<User>;
+export interface UserVerifyAccountRequest extends ValidatedRequestSchema {
+  [ContainerTypes.Body]: {
+    token: string;
+  };
+}
+
+export interface UserForgotPasswordRequest extends ValidatedRequestSchema {
+  [ContainerTypes.Body]: {
+    email: string;
+  };
+}
+
+export interface UserResetPasswordRequest extends ValidatedRequestSchema {
+  [ContainerTypes.Body]: {
+    token: string;
+    password: string;
+  };
+}
+
+export interface UserVerifyAccountRequest extends ValidatedRequestSchema {
+  [ContainerTypes.Body]: {
+    token: string;
+  };
+}
+
+export interface UserVerifyAccountJWTPayload extends JwtPayload {
+  user_id: string;
+}
+
+export interface UserResetPasswordJWTPayload extends JwtPayload {
+  user_id: string;
 }
 
 declare global {

@@ -111,3 +111,43 @@ export class RefreshTokenExpired extends BaseError {
     super();
   }
 }
+
+export class UserNotVerifiedError extends BaseError {
+  name = "user-not-verified-error";
+  message = "User unverified email.";
+  statusCode = 401;
+
+  constructor() {
+    super();
+  }
+}
+
+export class UserAccountAlreadyVerified extends BaseError {
+  name = "user-account-already-verified";
+  message = "User account already verified.";
+  statusCode = 401;
+
+  constructor() {
+    super();
+  }
+}
+
+export class UserDoesNotExistError extends BaseError {
+  name = "user-does-not-exist-error";
+  message = "User does not exist in out system.";
+  statusCode = 401;
+
+  constructor() {
+    super();
+  }
+}
+
+export class UserResetPasswordError extends BaseError {
+  name = "user-reset-password-error";
+  message = "Your new password cannot be the same as your old password.";
+  statusCode = 401;
+
+  constructor() {
+    super();
+  }
+}

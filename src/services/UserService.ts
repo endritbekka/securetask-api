@@ -43,11 +43,6 @@ class User extends ServiceProvider {
     return new Date().getTime() >= exp;
   }
 
-  public async saveSession(session: CreateUserSession) {
-    const repository = await this.repository(userSessionSchema);
-    return await repository.createAndSave(session);
-  }
-
   public async findByEntityId(entityId: string) {
     const repository = await this.repository(userSchema);
     return await repository.fetch(entityId);
@@ -65,6 +60,17 @@ class User extends ServiceProvider {
       .where(key)
       .is.equalTo(token)
       .return.first();
+  }
+
+  public async saveSession(user_entity_id: string) {
+    const repository = await this.repository(userSessionSchema);
+    return await repository.createAndSave({
+      user_entity_id: user_entity_id,
+      access_token: this.generateToken(),
+      refresh_token: this.generateToken(),
+      access_token_exp: this.getAccessTokenExpire(),
+      refresh_token_exp: this.getRefreshTokenExpire(),
+    });
   }
 }
 

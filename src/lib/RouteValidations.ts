@@ -30,4 +30,19 @@ export class RouteValidatorSchema {
       refresh_token: Joi.string().required(),
     });
   }
+
+  static verifyUserAccount() {
+    return Joi.object({ token: Joi.string().required() });
+  }
+
+  static userForgotPassword() {
+    return Joi.object({ email: Joi.string().required() });
+  }
+
+  static resetPassword() {
+    return Joi.object({
+      token: Joi.string().required(),
+      password: Joi.string().min(6).max(12).required(),
+    });
+  }
 }

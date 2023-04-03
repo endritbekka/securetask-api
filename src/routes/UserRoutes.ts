@@ -3,7 +3,10 @@ import UserController from "../Http/Controllers/UserController";
 import BaseResponse from "../Http/Responses/BaseResponse";
 import {
   CreateAndSaveUserRequest,
+  UserForgotPasswordRequest,
   UserLoginRequest,
+  UserResetPasswordRequest,
+  UserVerifyAccountRequest,
   ValidatedRequest,
 } from "../lib/types";
 import { RouteValidator, RouteValidatorSchema } from "../lib/RouteValidations";
@@ -50,6 +53,41 @@ router.post(
     BaseResponse(response).success(
       await UserController.reGenerateAccessToken(request)
     );
+  }
+);
+
+router.post(
+  "/verify-account",
+  RouteValidator.body(RouteValidatorSchema.verifyUserAccount()),
+  async (
+    request: ValidatedRequest<UserVerifyAccountRequest>,
+    response: Response
+  ) => {
+    BaseResponse(response).success(await UserController.verifyAccount(request));
+  }
+);
+
+router.post(
+  "/forgot-password",
+  RouteValidator.body(RouteValidatorSchema.userForgotPassword()),
+  async (
+    request: ValidatedRequest<UserForgotPasswordRequest>,
+    response: Response
+  ) => {
+    BaseResponse(response).success(
+      await UserController.forgotPassword(request)
+    );
+  }
+);
+
+router.post(
+  "/reset-password",
+  RouteValidator.body(RouteValidatorSchema.resetPassword()),
+  async (
+    request: ValidatedRequest<UserResetPasswordRequest>,
+    response: Response
+  ) => {
+    BaseResponse(response).success(await UserController.resetPassword(request));
   }
 );
 
