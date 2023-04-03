@@ -1,10 +1,10 @@
 import { Response } from "express";
 import {
   BaseError,
+  InternalServerError,
   JoiError,
   RouteNotFoundError,
 } from "../../utils/exceptions/Exceptions";
-import { UnknownError } from "../../utils/helpers/RouteExceptionHandler";
 import { ExpressJoiError } from "express-joi-validation";
 class BaseResponse {
   private response: Response;
@@ -14,7 +14,8 @@ class BaseResponse {
   }
 
   private handleError(err: unknown) {
-    const errOccurred = err instanceof BaseError ? err : UnknownError(err);
+    const errOccurred =
+      err instanceof BaseError ? err : new InternalServerError();
     this.response.status(errOccurred.statusCode).json(errOccurred);
   }
 
@@ -26,22 +27,14 @@ class BaseResponse {
   }
 
   public error(err: unknown) {
-    try {
-      if ((err as ExpressJoiError)?.error?.isJoi) {
-        throw new JoiError(err as ExpressJoiError);
-      }
-      this.handleError(err);
-    } catch (err: unknown) {
-      this.handleError(err);
+    if ((err as ExpressJoiError)?.error?.isJoi) {
+      err = new JoiError(err as ExpressJoiError);
     }
+    this.handleError(err);
   }
 
   public routeNotFound() {
-    try {
-      throw new RouteNotFoundError();
-    } catch (err: unknown) {
-      this.handleError(err);
-    }
+    this.handleError(new RouteNotFoundError());
   }
 }
 
